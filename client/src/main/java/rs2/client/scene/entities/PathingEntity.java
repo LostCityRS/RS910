@@ -957,7 +957,7 @@ public abstract class PathingEntity extends PrimaryLayerEntity implements Camera
 	@ObfuscatedName("ahm.cv(IIIIIIIII)V")
 	public void method16571(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7) {
 		if (this.method16515()) {
-			Client.updateInterfaceAnimation(this.field10461, this.field10461.method3923(), -1, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+			Client.loopLayer(this.field10461, this.field10461.method3923(), -1, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
 		}
 	}
 
@@ -977,7 +977,7 @@ public abstract class PathingEntity extends PrimaryLayerEntity implements Camera
 	@ObfuscatedName("ahm.ca(IIZB)V")
 	public void method16519(int arg0, int arg1, boolean arg2) {
 		if (this.method16515()) {
-			Client.method1597(this.field10461.components, -1, arg0, arg1, arg2);
+			Client.drawLayer(this.field10461.components, -1, arg0, arg1, arg2);
 		}
 	}
 

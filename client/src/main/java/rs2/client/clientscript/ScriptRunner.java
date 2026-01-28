@@ -113,7 +113,6 @@ import com.jagex.game.script.ScriptFrame;
 import com.jagex.game.script.SubInterface;
 import com.jagex.game.script.activepointers.ActiveComponent;
 import com.jagex.game.shared.console.DeveloperConsole;
-import com.jagex.game.shared.framework.chat.ChatCrownType;
 import com.jagex.game.shared.framework.chat.QuickChatDynamicCommand;
 import com.jagex.game.shared.framework.gwc.GWC;
 import com.jagex.game.shared.framework.gwc.GWCWorld;
@@ -511,7 +510,7 @@ public class ScriptRunner {
 		}
 		var13.itf = arg0;
 		var13.com = var12;
-		Client.requestRedrawComponent(var6);
+		Client.componentUpdated(var6);
 	}
 
 	@ObfuscatedName("eb.y(Lhq;Lhf;S)V")
@@ -5297,7 +5296,7 @@ public class ScriptRunner {
 		if (var1.com.id != -1) {
 			Component var2 = var1.method13790();
 			var2.subcomponents[var1.com.id] = null;
-			Client.requestRedrawComponent(var2);
+			Client.componentUpdated(var2);
 		} else if (arg0.secondary) {
 			throw new RuntimeException("");
 		} else {
@@ -5310,7 +5309,7 @@ public class ScriptRunner {
 		Component var1 = Component.get(arg0.intStack[--arg0.isp]);
 		var1.subcomponents = null;
 		var1.sortedsubcomponents = null;
-		Client.requestRedrawComponent(var1);
+		Client.componentUpdated(var1);
 	}
 
 	@ObfuscatedName("y.bq(Lyf;I)V")
@@ -5379,10 +5378,10 @@ public class ScriptRunner {
 
 	@ObfuscatedName("tp.bw(Lhf;Lyf;I)V")
 	public static final void cc_if_resume_pausebutton(Component arg0, ClientScriptState arg1) {
-		if (Client.method17197(arg0).method17689() && Client.pressedContinueOption == null) {
+		if (Client.getActive(arg0).method17689() && Client.pressedContinueOption == null) {
 			Client.method612(arg0.parentlayer, arg0.id);
 			Client.pressedContinueOption = Component.method16682(arg0.parentlayer, arg0.id);
-			Client.requestRedrawComponent(Client.pressedContinueOption);
+			Client.componentUpdated(Client.pressedContinueOption);
 		}
 	}
 
@@ -5465,7 +5464,7 @@ public class ScriptRunner {
 		}
 		arg0.xmode = (byte) var3;
 		arg0.ymode = (byte) var4;
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 		Client.method2103(arg1, arg0);
 		if (arg0.type == 0) {
 			Client.method8329(arg1, arg0, false);
@@ -5512,7 +5511,7 @@ public class ScriptRunner {
 		}
 		arg0.field2356 = (byte) var3;
 		arg0.field2174 = (byte) var4;
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 		Client.method2103(arg1, arg0);
 		if (arg0.type == 0) {
 			Client.method8329(arg1, arg0, false);
@@ -5540,7 +5539,7 @@ public class ScriptRunner {
 		boolean var3 = arg2.intStack[--arg2.isp] == 1;
 		if (arg0.hide != var3) {
 			arg0.hide = var3;
-			Client.requestRedrawComponent(arg0);
+			Client.componentUpdated(arg0);
 		}
 		if (arg0.id == -1 && !arg1.field2150) {
 			DelayedStateChange.onInterfaceHide(arg0.parentlayer);
@@ -5568,7 +5567,7 @@ public class ScriptRunner {
 		arg2.isp -= 2;
 		arg0.aspectwidth = arg2.intStack[arg2.isp];
 		arg0.aspectheight = arg2.intStack[arg2.isp + 1];
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 		Client.method2103(arg1, arg0);
 		if (arg0.type == 0) {
 			Client.method8329(arg1, arg0, false);
@@ -5629,7 +5628,7 @@ public class ScriptRunner {
 		if (arg0.scrolly < 0) {
 			arg0.scrolly = 0;
 		}
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 		if (arg0.id == -1 && !arg1.field2150) {
 			DelayedStateChange.onInterfaceScrollYPos(arg0.parentlayer);
 		}
@@ -5654,7 +5653,7 @@ public class ScriptRunner {
 	@ObfuscatedName("mj.cr(Lhf;Lhq;Lyf;I)V")
 	public static final void cc_if_setcolour(Component arg0, Interface arg1, ClientScriptState arg2) {
 		arg0.colour = arg2.intStack[--arg2.isp];
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 		if (arg0.id == -1 && !arg1.field2150) {
 			DelayedStateChange.onInterfaceColour(arg0.parentlayer);
 		}
@@ -5679,7 +5678,7 @@ public class ScriptRunner {
 	@ObfuscatedName("ch.ch(Lhf;Lhq;Lyf;I)V")
 	public static final void cc_if_setfill(Component arg0, Interface arg1, ClientScriptState arg2) {
 		arg0.fill = arg2.intStack[--arg2.isp] == 1;
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 	}
 
 	@ObfuscatedName("cq.cb(Lyf;I)V")
@@ -5701,7 +5700,7 @@ public class ScriptRunner {
 	@ObfuscatedName("hx.cy(Lhf;Lhq;Lyf;B)V")
 	public static final void cc_if_settrans(Component arg0, Interface arg1, ClientScriptState arg2) {
 		arg0.trans = arg2.intStack[--arg2.isp];
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 	}
 
 	@ObfuscatedName("ht.cc(Lyf;I)V")
@@ -5723,7 +5722,7 @@ public class ScriptRunner {
 	@ObfuscatedName("sv.ck(Lhf;Lhq;Lyf;B)V")
 	public static final void cc_if_setlinewid(Component arg0, Interface arg1, ClientScriptState arg2) {
 		arg0.linewid = arg2.intStack[--arg2.isp];
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 	}
 
 	@ObfuscatedName("iv.cj(Lyf;I)V")
@@ -5748,7 +5747,7 @@ public class ScriptRunner {
 		arg0.invobject = -1;
 		if (arg0.graphic != var3) {
 			arg0.graphic = var3;
-			Client.requestRedrawComponent(arg0);
+			Client.componentUpdated(arg0);
 		}
 		if (arg0.id == -1 && !arg1.field2150) {
 			DelayedStateChange.onInterfaceGraphic(arg0.parentlayer);
@@ -5774,7 +5773,7 @@ public class ScriptRunner {
 	@ObfuscatedName("dd.dt(Lhf;Lhq;Lyf;I)V")
 	public static final void cc_if_set2dangle(Component arg0, Interface arg1, ClientScriptState arg2) {
 		arg0.angle2d = arg2.intStack[--arg2.isp];
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 	}
 
 	@ObfuscatedName("dc.do(Lyf;B)V")
@@ -5796,7 +5795,7 @@ public class ScriptRunner {
 	@ObfuscatedName("wq.dv(Lhf;Lhq;Lyf;I)V")
 	public static final void cc_if_settiling(Component arg0, Interface arg1, ClientScriptState arg2) {
 		arg0.tiling = arg2.intStack[--arg2.isp] == 1;
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 	}
 
 	@ObfuscatedName("amq.dm(Lyf;I)V")
@@ -5819,7 +5818,7 @@ public class ScriptRunner {
 	public static final void cc_if_setmodel(Component arg0, Interface arg1, ClientScriptState arg2) {
 		arg0.modelkind = 1;
 		arg0.model = arg2.intStack[--arg2.isp];
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 		if (arg0.id == -1 && !arg1.field2150) {
 			DelayedStateChange.onInterfaceModel(arg0.parentlayer);
 		}
@@ -5850,7 +5849,7 @@ public class ScriptRunner {
 		arg0.modelangle_y = arg2.intStack[arg2.isp + 3];
 		arg0.modelangle_z = arg2.intStack[arg2.isp + 4];
 		arg0.modelzoom = arg2.intStack[arg2.isp + 5];
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 		if (arg0.id == -1 && !arg1.field2150) {
 			DelayedStateChange.onInterfaceModelXAnYAnZoom(arg0.parentlayer);
 			DelayedStateChange.onInterfaceModelXOfYOfZAn(arg0.parentlayer);
@@ -5886,7 +5885,7 @@ public class ScriptRunner {
 				arg0.modelAnimator.method14362(var3);
 			}
 			arg0.modelanim = var3;
-			Client.requestRedrawComponent(arg0);
+			Client.componentUpdated(arg0);
 		}
 		if (arg0.id == -1 && !arg1.field2150) {
 			DelayedStateChange.onInterfaceModelAnim(arg0.parentlayer);
@@ -5912,7 +5911,7 @@ public class ScriptRunner {
 	@ObfuscatedName("db.dp(Lhf;Lhq;Lyf;S)V")
 	public static final void cc_if_setmodelorthog(Component arg0, Interface arg1, ClientScriptState arg2) {
 		arg0.modelorthog = arg2.intStack[--arg2.isp] == 1;
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 	}
 
 	@ObfuscatedName("agu.dy(Lyf;B)V")
@@ -5938,7 +5937,7 @@ public class ScriptRunner {
 		arg0.tint_saturation = arg2.intStack[arg2.isp + 1];
 		arg0.tint_luminence = arg2.intStack[arg2.isp + 2];
 		arg0.tint_weight = arg2.intStack[arg2.isp + 3];
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 	}
 
 	@ObfuscatedName("xc.dx(Lyf;B)V")
@@ -5972,7 +5971,7 @@ public class ScriptRunner {
 		arg0.field2252 = arg2.intStack[arg2.isp + 7];
 		arg0.field2302 = arg2.intStack[arg2.isp + 8];
 		arg0.field2258 = arg2.intStack[arg2.isp + 9];
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 	}
 
 	@ObfuscatedName("sd.dj(Lyf;B)V")
@@ -5994,7 +5993,7 @@ public class ScriptRunner {
 	@ObfuscatedName("gz.ey(Lhf;Lhq;Lyf;I)V")
 	public static final void cc_if_resetmodellighting(Component arg0, Interface arg1, ClientScriptState arg2) {
 		arg0.customlighting = false;
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 	}
 
 	@ObfuscatedName("gr.eu(Lyf;I)V")
@@ -6018,7 +6017,7 @@ public class ScriptRunner {
 		String var3 = (String) arg2.objectStack[--arg2.osp];
 		if (!var3.equals(arg0.text)) {
 			arg0.text = var3;
-			Client.requestRedrawComponent(arg0);
+			Client.componentUpdated(arg0);
 		}
 		if (arg0.id == -1 && !arg1.field2150) {
 			DelayedStateChange.onInterfaceText(arg0.parentlayer);
@@ -6044,7 +6043,7 @@ public class ScriptRunner {
 	@ObfuscatedName("ft.el(Lhf;Lhq;Lyf;I)V")
 	public static final void cc_if_settextfont(Component arg0, Interface arg1, ClientScriptState arg2) {
 		arg0.textfont = arg2.intStack[--arg2.isp];
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 		if (arg0.id == -1 && !arg1.field2150) {
 			DelayedStateChange.onInterfaceFontType(arg0.parentlayer);
 		}
@@ -6072,7 +6071,7 @@ public class ScriptRunner {
 		arg0.field2223 = arg2.intStack[arg2.isp];
 		arg0.field2264 = arg2.intStack[arg2.isp + 1];
 		arg0.field2229 = arg2.intStack[arg2.isp + 2];
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 	}
 
 	@ObfuscatedName("uo.ec(Lyf;I)V")
@@ -6094,7 +6093,7 @@ public class ScriptRunner {
 	@ObfuscatedName("yu.em(Lhf;Lhq;Lyf;I)V")
 	public static final void cc_if_settextshadow(Component arg0, Interface arg1, ClientScriptState arg2) {
 		arg0.textshadow = arg2.intStack[--arg2.isp] == 1;
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 	}
 
 	@ObfuscatedName("is.eh(Lyf;I)V")
@@ -6116,7 +6115,7 @@ public class ScriptRunner {
 	@ObfuscatedName("if.eg(Lhf;Lhq;Lyf;S)V")
 	public static final void cc_if_settextantimacro(Component arg0, Interface arg1, ClientScriptState arg2) {
 		arg0.textantimacro = arg2.intStack[--arg2.isp] == 1;
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 		if (arg0.id == -1 && !arg1.field2150) {
 			DelayedStateChange.onInterfaceAntiTextMacro(arg0.parentlayer);
 		}
@@ -6141,7 +6140,7 @@ public class ScriptRunner {
 	@ObfuscatedName("jq.et(Lhf;Lhq;Lyf;B)V")
 	public static final void cc_if_setoutline(Component arg0, Interface arg1, ClientScriptState arg2) {
 		arg0.outline = arg2.intStack[--arg2.isp];
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 	}
 
 	@ObfuscatedName("va.ea(Lyf;I)V")
@@ -6163,7 +6162,7 @@ public class ScriptRunner {
 	@ObfuscatedName("wq.er(Lhf;Lhq;Lyf;B)V")
 	public static final void cc_if_setgraphicshadow(Component arg0, Interface arg1, ClientScriptState arg2) {
 		arg0.graphicshadow = arg2.intStack[--arg2.isp];
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 	}
 
 	@ObfuscatedName("sj.en(Lyf;I)V")
@@ -6185,7 +6184,7 @@ public class ScriptRunner {
 	@ObfuscatedName("uf.ex(Lhf;Lhq;Lyf;I)V")
 	public static final void cc_if_setvflip(Component arg0, Interface arg1, ClientScriptState arg2) {
 		arg0.vflip = arg2.intStack[--arg2.isp] == 1;
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 	}
 
 	@ObfuscatedName("jv.fg(Lyf;I)V")
@@ -6207,7 +6206,7 @@ public class ScriptRunner {
 	@ObfuscatedName("dh.fu(Lhf;Lhq;Lyf;B)V")
 	public static final void cc_if_sethflip(Component arg0, Interface arg1, ClientScriptState arg2) {
 		arg0.hflip = arg2.intStack[--arg2.isp] == 1;
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 	}
 
 	@ObfuscatedName("ib.fs(Lyf;B)V")
@@ -6231,7 +6230,7 @@ public class ScriptRunner {
 		arg2.isp -= 2;
 		arg0.scrollwidth = arg2.intStack[arg2.isp];
 		arg0.scrollheight = arg2.intStack[arg2.isp + 1];
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 		if (arg0.type == 0) {
 			Client.method8329(arg1, arg0, false);
 		}
@@ -6256,7 +6255,7 @@ public class ScriptRunner {
 	@ObfuscatedName("rm.fi(Lhf;Lhq;Lyf;B)V")
 	public static final void cc_if_setalpha(Component arg0, Interface arg1, ClientScriptState arg2) {
 		arg0.alpha = arg2.intStack[--arg2.isp] == 1;
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 	}
 
 	@ObfuscatedName("ky.ft(Lyf;I)V")
@@ -6278,7 +6277,7 @@ public class ScriptRunner {
 	@ObfuscatedName("fa.fv(Lhf;Lhq;Lyf;B)V")
 	public static final void cc_if_setmodelzoom(Component arg0, Interface arg1, ClientScriptState arg2) {
 		arg0.modelzoom = arg2.intStack[--arg2.isp];
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 		if (arg0.id == -1 && !arg1.field2150) {
 			DelayedStateChange.onInterfaceModelXAnYAnZoom(arg0.parentlayer);
 		}
@@ -6304,7 +6303,7 @@ public class ScriptRunner {
 	public static final void cc_if_setlinedirection(Component arg0, Interface arg1, ClientScriptState arg2) {
 		int var3 = arg2.intStack[--arg2.isp];
 		arg0.linedirection = var3 == 1;
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 	}
 
 	@ObfuscatedName("na.fp(Lyf;I)V")
@@ -6328,7 +6327,7 @@ public class ScriptRunner {
 		arg2.isp -= 2;
 		arg0.modelorigin_x = arg2.intStack[arg2.isp];
 		arg0.modelorigin_y = arg2.intStack[arg2.isp + 1];
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 	}
 
 	@ObfuscatedName("jr.fl(Lyf;I)V")
@@ -6350,7 +6349,7 @@ public class ScriptRunner {
 	@ObfuscatedName("d.fo(Lhf;Lhq;Lyf;B)V")
 	public static final void cc_if_setmaxlines(Component arg0, Interface arg1, ClientScriptState arg2) {
 		arg0.maxlines = arg2.intStack[--arg2.isp];
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 	}
 
 	@ObfuscatedName("p.fy(Lyf;I)V")
@@ -6436,7 +6435,7 @@ public class ScriptRunner {
 			return;
 		}
 		arg0.setrecol(var3, var4, var5);
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 		if (arg0.id == -1 && !arg1.field2150) {
 			DelayedStateChange.onInterfaceRecol(arg0.parentlayer, var3);
 		}
@@ -6468,7 +6467,7 @@ public class ScriptRunner {
 			return;
 		}
 		arg0.setretex(var3, var4, var5);
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 		if (arg0.id == -1 && !arg1.field2150) {
 			DelayedStateChange.onInterfaceRetex(arg0.parentlayer, var3);
 		}
@@ -6493,7 +6492,7 @@ public class ScriptRunner {
 	@ObfuscatedName("v.gc(Lhf;Lhq;Lyf;B)V")
 	public static final void cc_if_setfontmono(Component arg0, Interface arg1, ClientScriptState arg2) {
 		arg0.fontmono = arg2.intStack[--arg2.isp] == 1;
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 		if (arg0.id == -1 && !arg1.field2150) {
 			DelayedStateChange.onInterfaceFontMono(arg0.parentlayer);
 		}
@@ -6533,7 +6532,7 @@ public class ScriptRunner {
 	@ObfuscatedName("abv.gg(Lhf;Lhq;Lyf;I)V")
 	public static final void cc_if_setclickmask(Component arg0, Interface arg1, ClientScriptState arg2) {
 		arg0.clickmask = arg2.intStack[--arg2.isp] == 1;
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 		if (arg0.id == -1 && !arg1.field2150) {
 			DelayedStateChange.onInterfaceClickMask(arg0.parentlayer);
 		}
@@ -6558,7 +6557,7 @@ public class ScriptRunner {
 	@ObfuscatedName("jp.gt(Lhf;Lhq;Lyf;I)V")
 	public static final void cc_if_setheld(Component arg0, Interface arg1, ClientScriptState arg2) {
 		arg0.held = arg2.intStack[--arg2.isp] == 1;
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 	}
 
 	@ObfuscatedName("je.gh(Lyf;I)V")
@@ -9114,7 +9113,7 @@ public class ScriptRunner {
 	public static final void cc_gettargetmask(ClientScriptState arg0) {
 		ActiveComponent var1 = arg0.secondary ? arg0.activeComponent2 : arg0.activeComponent;
 		Component var2 = var1.com;
-		arg0.intStack[++arg0.isp - 1] = Client.method17197(var2).method17691();
+		arg0.intStack[++arg0.isp - 1] = Client.getActive(var2).method17691();
 	}
 
 	@ObfuscatedName("ww.sa(Lyf;B)V")
@@ -9247,7 +9246,7 @@ public class ScriptRunner {
 			throw new RuntimeException("");
 		} else if (var3 >= 0 && var3 < 12) {
 			method5921(arg0, var3, var2, 1.0F, 0, 0, 0, 0, 0, 0);
-			Client.requestRedrawComponent(arg0);
+			Client.componentUpdated(arg0);
 		} else {
 			throw new RuntimeException("");
 		}
@@ -9285,7 +9284,7 @@ public class ScriptRunner {
 			throw new RuntimeException("");
 		} else if (var2 >= 0 && var2 < 12) {
 			method5921(arg0, var2, var3, var6, var7, var8, var9, var10, var11, var12);
-			Client.requestRedrawComponent(arg0);
+			Client.componentUpdated(arg0);
 		} else {
 			throw new RuntimeException("");
 		}
@@ -9313,7 +9312,7 @@ public class ScriptRunner {
 			throw new RuntimeException("");
 		} else if (var3 >= 0 && var3 < 5) {
 			method2088(arg0, var3, var2);
-			Client.requestRedrawComponent(arg0);
+			Client.componentUpdated(arg0);
 		} else {
 			throw new RuntimeException("");
 		}
@@ -9356,7 +9355,7 @@ public class ScriptRunner {
 			throw new RuntimeException("");
 		}
 		arg0.customisation.field2684[var4] = (short) var2;
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 	}
 
 	@ObfuscatedName("acr.tv(Lyf;I)V")
@@ -9396,7 +9395,7 @@ public class ScriptRunner {
 			throw new RuntimeException("");
 		}
 		arg0.customisation.field2685[var4] = (short) var2;
-		Client.requestRedrawComponent(arg0);
+		Client.componentUpdated(arg0);
 	}
 
 	@ObfuscatedName("kh.tq(Lyf;B)V")
@@ -9445,7 +9444,7 @@ public class ScriptRunner {
 	public static final void if_gethide(ClientScriptState arg0) {
 		int var1 = arg0.intStack[--arg0.isp];
 		Component var2 = Component.get(var1);
-		arg0.intStack[++arg0.isp - 1] = Client.ifIsVisible(var2) ? 1 : 0;
+		arg0.intStack[++arg0.isp - 1] = Client.hide(var2) ? 1 : 0;
 	}
 
 	@ObfuscatedName("ack.uq(Lyf;I)V")
@@ -9676,7 +9675,7 @@ public class ScriptRunner {
 	public static final void if_gettargetmask(ClientScriptState arg0) {
 		int var1 = arg0.intStack[--arg0.isp];
 		Component var2 = Component.get(var1);
-		arg0.intStack[++arg0.isp - 1] = Client.method17197(var2).method17691();
+		arg0.intStack[++arg0.isp - 1] = Client.getActive(var2).method17691();
 	}
 
 	@ObfuscatedName("va.vo(Lyf;I)V")
@@ -9711,7 +9710,7 @@ public class ScriptRunner {
 
 	@ObfuscatedName("aau.vt(Lyf;I)V")
 	public static final void if_close(ClientScriptState arg0) {
-		Client.ifClose(true);
+		Client.closeModal(true);
 	}
 
 	@ObfuscatedName("mz.vu(Lyf;B)V")
@@ -9764,7 +9763,7 @@ public class ScriptRunner {
 		int var2 = arg0.intStack[arg0.isp + 1];
 		int var3 = arg0.intStack[arg0.isp + 2];
 		Component var4 = Component.get(var3);
-		Client.ifDragPickup(var4, var1, var2);
+		Client.dragTryPickup(var4, var1, var2);
 	}
 
 	@ObfuscatedName("qe.vm(Lyf;I)V")
@@ -9773,7 +9772,7 @@ public class ScriptRunner {
 		int var1 = arg0.intStack[arg0.isp];
 		int var2 = arg0.intStack[arg0.isp + 1];
 		ActiveComponent var3 = arg0.secondary ? arg0.activeComponent2 : arg0.activeComponent;
-		Client.ifDragPickup(var3.com, var1, var2);
+		Client.dragTryPickup(var3.com, var1, var2);
 	}
 
 	@ObfuscatedName("na.vg(Lyf;B)V")
@@ -9789,7 +9788,7 @@ public class ScriptRunner {
 		arg0.isp -= 2;
 		int var1 = arg0.intStack[arg0.isp];
 		int var2 = arg0.intStack[arg0.isp + 1];
-		Client.ifOpenSub(var1, new SubInterface(var2, 3), null, true);
+		Client.openSubInterface(var1, new SubInterface(var2, 3), null, true);
 	}
 
 	@ObfuscatedName("aar.vd(Lyf;S)V")
@@ -9798,7 +9797,7 @@ public class ScriptRunner {
 		int var1 = arg0.intStack[arg0.isp];
 		SubInterface var2 = (SubInterface) Client.openedSubInterfaces.get((long) var1);
 		if (var2 != null && var2.field11570 == 3) {
-			Client.ifCloseSub(var2, true, true);
+			Client.closeSubInterface(var2, true, true);
 		}
 	}
 
@@ -10743,25 +10742,25 @@ public class ScriptRunner {
 	@ObfuscatedName("ij.aag(Lyf;I)V")
 	public static final void friend_add(ClientScriptState arg0) {
 		String var1 = (String) arg0.objectStack[--arg0.osp];
-		Client.friendAdd(var1);
+		Client.addFriend(var1);
 	}
 
 	@ObfuscatedName("yg.aak(Lyf;I)V")
 	public static final void friend_del(ClientScriptState arg0) {
 		String var1 = (String) arg0.objectStack[--arg0.osp];
-		Client.friendDelete(var1);
+		Client.delFriend(var1);
 	}
 
 	@ObfuscatedName("vx.aad(Lyf;I)V")
 	public static final void ignore_add(ClientScriptState arg0) {
 		String var1 = (String) arg0.objectStack[--arg0.osp];
-		Client.ignoreAdd(var1, false);
+		Client.addIgnore(var1, false);
 	}
 
 	@ObfuscatedName("qn.aaa(Lyf;I)V")
 	public static final void ignore_del(ClientScriptState arg0) {
 		String var1 = (String) arg0.objectStack[--arg0.osp];
-		Client.ignoreDelete(var1);
+		Client.delIgnore(var1);
 	}
 
 	@ObfuscatedName("ex.aax(Lyf;I)V")
@@ -10976,7 +10975,7 @@ public class ScriptRunner {
 	@ObfuscatedName("uw.abv(Lyf;I)V")
 	public static final void ignore_add_temp(ClientScriptState arg0) {
 		String var1 = (String) arg0.objectStack[--arg0.osp];
-		Client.ignoreAdd(var1, true);
+		Client.addIgnore(var1, true);
 	}
 
 	@ObfuscatedName("xq.abq(Lyf;B)V")
@@ -15871,7 +15870,7 @@ public class ScriptRunner {
 		int var2 = arg0.intStack[arg0.isp + 1];
 		Component var3 = Component.method16682(var1, var2);
 		Client.method9403();
-		ServerKeyProperties var4 = Client.method17197(var3);
+		ServerKeyProperties var4 = Client.getActive(var3);
 		Client.setTargetActiveComponent(var3, var4.method17691(), var4.field11381);
 	}
 

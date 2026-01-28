@@ -717,27 +717,27 @@ public class MiniMenu {
 	public static void method7624(Component arg0, int arg1, int arg2) {
 		if (Client.targetModeActive) {
 			ParamType var3 = (ParamType) (Client.field7677 == -1 ? null : Client.paramTypeList.list(Client.field7677));
-			if (Client.method17197(arg0).method17708() && (Client.field1765 & 0x20) != 0 && (var3 == null || arg0.getParam(Client.field7677, var3.defaultint) != var3.defaultint)) {
+			if (Client.getActive(arg0).method17708() && (Client.field1765 & 0x20) != 0 && (var3 == null || arg0.getParam(Client.field7677, var3.defaultint) != var3.defaultint)) {
 				method3042(Client.field11039, Client.field10977 + " " + TextUtil.ARROW + " " + arg0.opbase, Client.field1844, 58, arg0.invobject, 0L, arg0.id, arg0.parentlayer, true, false, (long) (arg0.id << 32 | arg0.parentlayer), false);
 			}
 		}
 		for (int var4 = 9; var4 >= 5; var4--) {
 			String var5 = method2846(arg0, var4);
 			if (var5 != null) {
-				method3042(var5, arg0.opbase, Client.method17826(arg0, var4), 1007, arg0.invobject, (long) (var4 + 1), arg0.id, arg0.parentlayer, true, false, (long) (arg0.id << 32 | arg0.parentlayer), false);
+				method3042(var5, arg0.opbase, Client.getIfTypeOpName(arg0, var4), 1007, arg0.invobject, (long) (var4 + 1), arg0.id, arg0.parentlayer, true, false, (long) (arg0.id << 32 | arg0.parentlayer), false);
 			}
 		}
-		String var6 = Client.method9557(arg0);
+		String var6 = Client.targetVerb(arg0);
 		if (var6 != null) {
 			method3042(var6, arg0.opbase, arg0.targetopcursor, 25, arg0.invobject, 0L, arg0.id, arg0.parentlayer, true, false, (long) (arg0.id << 32 | arg0.parentlayer), false);
 		}
 		for (int var7 = 4; var7 >= 0; var7--) {
 			String var8 = method2846(arg0, var7);
 			if (var8 != null) {
-				method3042(var8, arg0.opbase, Client.method17826(arg0, var7), 57, arg0.invobject, (long) (var7 + 1), arg0.id, arg0.parentlayer, true, false, (long) (arg0.id << 32 | arg0.parentlayer), false);
+				method3042(var8, arg0.opbase, Client.getIfTypeOpName(arg0, var7), 57, arg0.invobject, (long) (var7 + 1), arg0.id, arg0.parentlayer, true, false, (long) (arg0.id << 32 | arg0.parentlayer), false);
 			}
 		}
-		if (!Client.method17197(arg0).method17689()) {
+		if (!Client.getActive(arg0).method17689()) {
 			return;
 		}
 		if (arg0.pausetext == null) {
@@ -1838,7 +1838,7 @@ public class MiniMenu {
 		String[] var6 = var2.op;
 		boolean var7 = false;
 		if (Client.field10985) {
-			var6 = Client.method18725(var6);
+			var6 = Client.prependOpIndex(var6);
 		}
 		if (var6 == null) {
 			return;
@@ -2001,7 +2001,7 @@ public class MiniMenu {
 
 	@ObfuscatedName("ez.be(Lhf;II)Ljava/lang/String;")
 	public static String method2846(Component arg0, int arg1) {
-		if (!Client.method17197(arg0).method17690(arg1) && arg0.onop == null) {
+		if (!Client.getActive(arg0).method17690(arg1) && arg0.onop == null) {
 			return null;
 		} else if (arg0.op == null || arg0.op.length <= arg1 || arg0.op[arg1] == null || arg0.op[arg1].trim().length() == 0) {
 			return Client.field10881 ? "Hidden-" + arg1 : null;
@@ -2064,9 +2064,9 @@ public class MiniMenu {
 			Component var12 = Component.method16682(var5, var4);
 			if (var12 != null) {
 				Client.method9403();
-				ServerKeyProperties var13 = Client.method17197(var12);
+				ServerKeyProperties var13 = Client.getActive(var12);
 				Client.setTargetActiveComponent(var12, var13.method17691(), var13.field11381);
-				Client.field11039 = Client.method9557(var12);
+				Client.field11039 = Client.targetVerb(var12);
 				if (Client.field11039 == null) {
 					Client.field11039 = "Null";
 				}
@@ -2332,14 +2332,14 @@ public class MiniMenu {
 			Client.method612(var5, var4);
 			Client.pressedContinueOption = Component.method16682(var5, var4);
 			if (Client.pressedContinueOption != null) {
-				Client.requestRedrawComponent(Client.pressedContinueOption);
+				Client.componentUpdated(Client.pressedContinueOption);
 			}
 		}
 		if (Client.targetModeActive) {
 			Client.method9403();
 		}
 		if (Client.selectedArea != null && Client.selectedCycle == 0) {
-			Client.requestRedrawComponent(Client.selectedArea);
+			Client.componentUpdated(Client.selectedArea);
 		}
 	}
 

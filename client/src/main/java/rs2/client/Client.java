@@ -88,7 +88,6 @@ import com.jagex.game.client.RebuildRequest;
 import com.jagex.game.client.RebuildStage;
 import com.jagex.game.client.RebuildType;
 import com.jagex.game.client.ReceivePlayerPositions;
-import com.jagex.game.client.ScreenBoundingBox;
 import com.jagex.game.client.ServerAddress;
 import com.jagex.game.client.StockmarketSlot;
 import com.jagex.game.client.TextCoord;
@@ -152,7 +151,6 @@ import com.jagex.game.config.structtype.StructTypeList;
 import com.jagex.game.config.vartype.SparseVarDomain;
 import com.jagex.game.config.vartype.VarContainerSparse;
 import com.jagex.game.config.vartype.VarType;
-import com.jagex.game.config.vartype.VarTypeList;
 import com.jagex.game.config.vartype.VariableTypeProvider;
 import com.jagex.game.config.vartype.bit.VarBitType;
 import com.jagex.game.config.vartype.bit.VarBitTypeList;
@@ -251,7 +249,6 @@ import com.jagex.graphics.SkyBox;
 import com.jagex.graphics.Sprite;
 import com.jagex.graphics.SpriteData;
 import com.jagex.graphics.SpriteDataProvider;
-import com.jagex.graphics.SpriteRelated;
 import com.jagex.graphics.TextureList;
 import com.jagex.graphics.Toolkit;
 import com.jagex.graphics.ToolkitType;
@@ -2944,7 +2941,7 @@ public class Client extends GameShell {
 						break;
 					}
 				}
-				ifCloseSub(var1, true, false);
+				closeSubInterface(var1, true, false);
 			}
 			openedTopInterface = -1;
 			openedSubInterfaces = new HashTable(8);
@@ -2991,7 +2988,7 @@ public class Client extends GameShell {
 						break;
 					}
 				}
-				ifCloseSub(var1, true, false);
+				closeSubInterface(var1, true, false);
 			}
 			openedTopInterface = -1;
 			openedSubInterfaces = new HashTable(8);
@@ -3964,7 +3961,7 @@ public class Client extends GameShell {
 										var22 = (HookRequest) hookRequests.removeHead();
 										if (var22 == null) {
 											if (field10989 != null) {
-												method6847();
+												loopIf3Drag();
 											}
 											if (loopCycle % 15000 == 0) {
 												method3095();
@@ -4219,7 +4216,7 @@ public class Client extends GameShell {
 		if (selectedArea != null) {
 			selectedCycle++;
 			if (selectedCycle >= 15) {
-				requestRedrawComponent(selectedArea);
+				componentUpdated(selectedArea);
 				selectedArea = null;
 			}
 		}
@@ -4264,7 +4261,7 @@ public class Client extends GameShell {
 												field11003 = 0;
 											}
 											if (field10989 != null) {
-												method6847();
+												loopIf3Drag();
 											}
 											MiniMenu.method9026();
 											if (staffModLevel > 0 && keyboard.keyheld(82) && keyboard.keyheld(81) && field10817 != 0) {
@@ -4397,7 +4394,7 @@ public class Client extends GameShell {
 	@ObfuscatedName("xl.fk(B)V")
 	public static final void updateInterfaces() {
 		for (int var0 = localPlayerGameState.varps.pollServerValue(true); var0 != -1; var0 = localPlayerGameState.varps.pollServerValue(false)) {
-			onVarPlayerChanged(var0);
+			clientVar(var0);
 			varpTransmitted[++varpTransmitNum - 1 & 0x3F] = var0;
 		}
 		for (DelayedStateChange var1 = DelayedStateChange.poll(); var1 != null; var1 = DelayedStateChange.poll()) {
@@ -4415,13 +4412,13 @@ public class Client extends GameShell {
 				Component var7 = Component.get((int) var3);
 				if (!var1.str0.equals(var7.text)) {
 					var7.text = var1.str0;
-					requestRedrawComponent(var7);
+					componentUpdated(var7);
 				}
 			} else if (var2 == 23) {
 				Component var8 = Component.get((int) var3);
 				if (var8.textantimacro != (var1.int0 == 1)) {
 					var8.textantimacro = var1.int0 == 1;
-					requestRedrawComponent(var8);
+					componentUpdated(var8);
 				}
 			} else if (var2 == 4) {
 				Component var9 = Component.get((int) var3);
@@ -4433,7 +4430,7 @@ public class Client extends GameShell {
 					var9.model = var11;
 					var9.field2298 = var12;
 					var9.customisation = null;
-					requestRedrawComponent(var9);
+					componentUpdated(var9);
 				}
 			} else if (var2 == 5) {
 				Component var13 = Component.get((int) var3);
@@ -4447,7 +4444,7 @@ public class Client extends GameShell {
 						var13.modelAnimator.method14362(var1.int0);
 					}
 					var13.modelanim = var1.int0;
-					requestRedrawComponent(var13);
+					componentUpdated(var13);
 				}
 			} else if (var2 == 6) {
 				int var14 = var1.int0;
@@ -4458,14 +4455,14 @@ public class Client extends GameShell {
 				Component var19 = Component.get((int) var3);
 				if (var19.colour != var18) {
 					var19.colour = var18;
-					requestRedrawComponent(var19);
+					componentUpdated(var19);
 				}
 			} else if (var2 == 7) {
 				Component var20 = Component.get((int) var3);
 				boolean var21 = var1.int0 == 1;
 				if (var20.hide != var21) {
 					var20.hide = var21;
-					requestRedrawComponent(var20);
+					componentUpdated(var20);
 				}
 			} else if (var2 == 8) {
 				Component var22 = Component.get((int) var3);
@@ -4480,14 +4477,14 @@ public class Client extends GameShell {
 							var22.modelzoom = var22.modelzoom * 32 / var22.wsize;
 						}
 					}
-					requestRedrawComponent(var22);
+					componentUpdated(var22);
 				}
 			} else if (var2 == 9) {
 				Component var23 = Component.get((int) var3);
 				if (var1.int0 != var23.invobject || var1.int1 != var23.invcount) {
 					var23.invobject = var1.int0;
 					var23.invcount = var1.int1;
-					requestRedrawComponent(var23);
+					componentUpdated(var23);
 				}
 			} else if (var2 == 10) {
 				Component var24 = Component.get((int) var3);
@@ -4495,7 +4492,7 @@ public class Client extends GameShell {
 					var24.modelxof = var1.int0;
 					var24.modelyof = var1.int1;
 					var24.modelangle_z = var1.int2;
-					requestRedrawComponent(var24);
+					componentUpdated(var24);
 				}
 			} else if (var2 == 11) {
 				Component var25 = Component.get((int) var3);
@@ -4503,7 +4500,7 @@ public class Client extends GameShell {
 				var25.x = var25.xpos = var1.int0;
 				var25.ymode = 0;
 				var25.y = var25.ypos = var1.int1;
-				requestRedrawComponent(var25);
+				componentUpdated(var25);
 			} else if (var2 == 12) {
 				Component var26 = Component.get((int) var3);
 				int var27 = var1.int0;
@@ -4516,7 +4513,7 @@ public class Client extends GameShell {
 					}
 					if (var26.scrolly != var27) {
 						var26.scrolly = var27;
-						requestRedrawComponent(var26);
+						componentUpdated(var26);
 					}
 				}
 			} else if (var2 == 13) {
@@ -5789,7 +5786,7 @@ public class Client extends GameShell {
 	public static final void drawTitleOrLobby() {
 		ParticleSystemRenderer.method6866(toolkit, (long) loopCycle);
 		if (openedTopInterface != -1) {
-			method14428(openedTopInterface);
+			animateInterface(openedTopInterface);
 		}
 		for (int var0 = 0; var0 < topLevelComponentCount; var0++) {
 			topLevelComponentRedrawRequested[var0] = topLevelComponentRedrawRequestedTemp[var0];
@@ -5824,7 +5821,7 @@ public class Client extends GameShell {
 		}
 		ParticleSystemRenderer.method6866(toolkit, (long) loopCycle);
 		if (openedTopInterface != -1) {
-			method14428(openedTopInterface);
+			animateInterface(openedTopInterface);
 		}
 		for (int var2 = 0; var2 < topLevelComponentCount; var2++) {
 			topLevelComponentRedrawRequested[var2] = topLevelComponentRedrawRequestedTemp[var2];
@@ -8539,7 +8536,7 @@ public class Client extends GameShell {
 			int var91 = var2.g4s();
 			LocPositionAdjustment var92 = new LocPositionAdjustment(var2, var90, false);
 			incrementVerifyId();
-			ifOpenSub(var82, new SubInterfaceActiveLoc(var84, var85, new LocReference(var83, var92.shape, var92.angle, var91)), new int[] { var86, var87, var88, var89 }, false);
+			openSubInterface(var82, new SubInterfaceActiveLoc(var84, var85, new LocReference(var83, var92.shape, var92.angle, var91)), new int[] { var86, var87, var88, var89 }, false);
 			arg0.packetType = null;
 			return true;
 		} else if (ServerProt.UPDATE_FRIENDLIST == arg0.packetType) {
@@ -9243,7 +9240,7 @@ public class Client extends GameShell {
 			SubInterface var266 = (SubInterface) openedSubInterfaces.get((long) var264);
 			SubInterface var267 = (SubInterface) openedSubInterfaces.get((long) var265);
 			if (var267 != null) {
-				ifCloseSub(var267, var266 == null || var266.field11571 != var267.field11571, false);
+				closeSubInterface(var267, var266 == null || var266.field11571 != var267.field11571, false);
 			}
 			if (var266 != null) {
 				var266.unlink();
@@ -9251,15 +9248,15 @@ public class Client extends GameShell {
 			}
 			Component var268 = Component.get(var264);
 			if (var268 != null) {
-				requestRedrawComponent(var268);
+				componentUpdated(var268);
 			}
 			Component var269 = Component.get(var265);
 			if (var269 != null) {
-				requestRedrawComponent(var269);
+				componentUpdated(var269);
 				method8329(Component.interfaces[var269.parentlayer >>> 16], var269, true);
 			}
 			if (openedTopInterface != -1) {
-				method1023(openedTopInterface, 1);
+				runHookImmediate(openedTopInterface, 1);
 			}
 			arg0.packetType = null;
 			return true;
@@ -9496,7 +9493,7 @@ public class Client extends GameShell {
 			incrementVerifyId();
 			int[] var335 = new int[] { var332, var333, var331, var330 };
 			openedTopInterface = var334;
-			method17758(var334, var335);
+			ifAnimReset(var334, var335);
 			computeTopLevelInterfaceLayout(false);
 			ScriptRunner.executeOnLoad(openedTopInterface, var335);
 			for (int var336 = 0; var336 < 114; var336++) {
@@ -9903,7 +9900,7 @@ public class Client extends GameShell {
 			int var446 = var2.g1_alt1();
 			int var447 = var2.g4_alt2();
 			incrementVerifyId();
-			ifOpenSub(var442, new SubInterfaceActiveObj(var439, var446, new ObjReference(var441, var444)), new int[] { var445, var447, var440, var443 }, false);
+			openSubInterface(var442, new SubInterfaceActiveObj(var439, var446, new ObjReference(var441, var444)), new int[] { var445, var447, var440, var443 }, false);
 			arg0.packetType = null;
 			return true;
 		} else if (ServerProt.LOC_DEL == arg0.packetType) {
@@ -9996,7 +9993,7 @@ public class Client extends GameShell {
 			int var477 = var2.g4_alt3();
 			int var478 = var2.g2_alt3();
 			incrementVerifyId();
-			ifOpenSub(var473, new SubInterfaceActivePlayer(var478, var475, var476), new int[] { var471, var477, var472, var474 }, false);
+			openSubInterface(var473, new SubInterfaceActivePlayer(var478, var475, var476), new int[] { var471, var477, var472, var474 }, false);
 			arg0.packetType = null;
 			return true;
 		} else if (ServerProt.MESSAGE_QUICKCHAT_PLAYER_GROUP == arg0.packetType) {
@@ -10044,10 +10041,10 @@ public class Client extends GameShell {
 			incrementVerifyId();
 			SubInterface var494 = (SubInterface) openedSubInterfaces.get((long) var493);
 			if (var494 != null) {
-				ifCloseSub(var494, true, false);
+				closeSubInterface(var494, true, false);
 			}
 			if (pressedContinueOption != null) {
-				requestRedrawComponent(pressedContinueOption);
+				componentUpdated(pressedContinueOption);
 				pressedContinueOption = null;
 			}
 			arg0.packetType = null;
@@ -10328,7 +10325,7 @@ public class Client extends GameShell {
 			int var580 = var2.g4_alt2();
 			int var581 = var2.g4_alt2();
 			incrementVerifyId();
-			ifOpenSub(var576, new SubInterface(var579, var577), new int[] { var581, var580, var575, var578 }, false);
+			openSubInterface(var576, new SubInterface(var579, var577), new int[] { var581, var580, var575, var578 }, false);
 			arg0.packetType = null;
 			return true;
 		} else if (ServerProt.SETDRAWORDER == arg0.packetType) {
@@ -10468,7 +10465,7 @@ public class Client extends GameShell {
 			int var632 = var2.g4s();
 			int var633 = var2.g4_alt1();
 			incrementVerifyId();
-			ifOpenSub(var633, new SubInterfaceActiveNpc(var626, var631, var630), new int[] { var627, var628, var632, var629 }, false);
+			openSubInterface(var633, new SubInterfaceActiveNpc(var626, var631, var630), new int[] { var627, var628, var632, var629 }, false);
 			arg0.packetType = null;
 			return true;
 		} else if (ServerProt.CLANSETTINGS_DELTA == arg0.packetType) {
@@ -10700,7 +10697,7 @@ public class Client extends GameShell {
 			return true;
 		} else if (ServerProt.TRIGGER_ONDIALOGABORT == arg0.packetType) {
 			if (openedTopInterface != -1) {
-				method1023(openedTopInterface, 0);
+				runHookImmediate(openedTopInterface, 0);
 			}
 			arg0.packetType = null;
 			return true;
@@ -12086,7 +12083,7 @@ public class Client extends GameShell {
 		activeComponentInvobject = arg0.invobject;
 		field1844 = arg0.field2202;
 		defaultCursor = arg0.field2269;
-		requestRedrawComponent(arg0);
+		componentUpdated(arg0);
 	}
 
 	@ObfuscatedName("vu.jb(I)V")
@@ -12105,7 +12102,7 @@ public class Client extends GameShell {
 		activeComponentInvobject = -1;
 		targetModeActive = false;
 		if (var0 != null) {
-			requestRedrawComponent(var0);
+			componentUpdated(var0);
 		}
 	}
 
@@ -12168,7 +12165,7 @@ public class Client extends GameShell {
 			var5.onop = var4.onop;
 			ScriptRunner.runHook(var5);
 		}
-		if (!method17197(var4).method17690(arg0 - 1)) {
+		if (!getActive(var4).method17690(arg0 - 1)) {
 			return;
 		}
 		ServerConnection var6 = getCurrentConnection();
@@ -12288,18 +12285,18 @@ public class Client extends GameShell {
 				}
 				var11.field2182 = var12;
 				var11.field2237 = loopCycle;
-				if (!ifIsVisible(var11)) {
+				if (!hide(var11)) {
 					if (var11.clientcode != 0) {
-						method9454(var11);
+						clientComponent(var11);
 					}
 					int var13 = var11.x + arg6;
 					int var14 = var11.y + arg7;
 					int var15 = var11.trans;
-					if (field10881 && (method17197(var11).field11385 != 0 || var11.type == 0) && var15 > 127) {
+					if (field10881 && (getActive(var11).field11385 != 0 || var11.type == 0) && var15 > 127) {
 						var15 = 127;
 					}
 					if (field10989 == var11) {
-						if (arg1 != -1412584499 && (Component.field2157 == var11.dragrenderbehaviour || Component.field2234 == var11.dragrenderbehaviour || method17197(var11).method17701() && Component.field2266 != var11.dragrenderbehaviour)) {
+						if (arg1 != -1412584499 && (Component.field2157 == var11.dragrenderbehaviour || Component.field2234 == var11.dragrenderbehaviour || getActive(var11).method17701() && Component.field2266 != var11.dragrenderbehaviour)) {
 							field7603 = arg0;
 							field4869 = arg6;
 							field11893 = arg7;
@@ -12322,7 +12319,7 @@ public class Client extends GameShell {
 							if (var11.height + var19 > field10998 + field10889) {
 								var19 = field10998 + field10889 - var11.height;
 							}
-							if (method17197(var11).method17701()) {
+							if (getActive(var11).method17701()) {
 								requestRedrawAtPoint(var18, var19, var11.width, var11.height);
 							}
 							if (Component.field2266 != var11.dragrenderbehaviour) {
@@ -12526,7 +12523,7 @@ public class Client extends GameShell {
 											toolkit.resetBounds(arg2, arg3, arg4, arg5);
 										}
 									} else if (Component.field2338) {
-										requestRedrawComponent(var11);
+										componentUpdated(var11);
 									}
 								}
 							} else if (var11.type == 5) {
@@ -12602,7 +12599,7 @@ public class Client extends GameShell {
 											}
 										}
 									} else if (Component.field2338) {
-										requestRedrawComponent(var11);
+										componentUpdated(var11);
 									}
 								}
 							} else if (var11.type == 6) {
@@ -12619,7 +12616,7 @@ public class Client extends GameShell {
 										ObjType var64 = var63.getMeshAddress(var11.invcount);
 										var60 = var64.method14644(toolkit, var61, 1, var11.field2246 ? localPlayerEntity.model : null, var11.modelAnimator, 0, 0, 0, 0);
 										if (var60 == null) {
-											requestRedrawComponent(var11);
+											componentUpdated(var11);
 										} else {
 											var62 = -var60.getMinY() >> 1;
 										}
@@ -12631,7 +12628,7 @@ public class Client extends GameShell {
 										if (var66 != null && (currentPlayerUid == var65 || StringTools.method14059(var66.nameUnfiltered) == var11.field2298)) {
 											var60 = var11.method3944(toolkit, var61, basTypeList, idkTypeList, npcTypeList, objTypeList, seqTypeList, localPlayerGameState, localPlayerGameState, var11.modelAnimator, var66.model);
 											if (var60 == null && Component.field2338) {
-												requestRedrawComponent(var11);
+												componentUpdated(var11);
 											}
 										}
 									}
@@ -12663,12 +12660,12 @@ public class Client extends GameShell {
 								} else if (var11.modelAnimator != null && var11.modelAnimator.hasSeqType()) {
 									var60 = var11.method3944(toolkit, var61, basTypeList, idkTypeList, npcTypeList, objTypeList, seqTypeList, localPlayerGameState, localPlayerGameState, var11.modelAnimator, localPlayerEntity.model);
 									if (var60 == null && Component.field2338) {
-										requestRedrawComponent(var11);
+										componentUpdated(var11);
 									}
 								} else {
 									var60 = var11.method3944(toolkit, var61, basTypeList, idkTypeList, npcTypeList, objTypeList, seqTypeList, localPlayerGameState, localPlayerGameState, null, localPlayerEntity.model);
 									if (var60 == null && Component.field2338) {
-										requestRedrawComponent(var11);
+										componentUpdated(var11);
 									}
 								}
 								if (var60 != null) {
@@ -12888,7 +12885,7 @@ public class Client extends GameShell {
 
 	@ObfuscatedName("vn.jc(ZI)V")
 	public static final void computeTopLevelInterfaceLayout(boolean arg0) {
-		method8493(openedTopInterface, GameShell.canvasWid, GameShell.canvasHei, arg0);
+		drawInterface(openedTopInterface, GameShell.canvasWid, GameShell.canvasHei, arg0);
 	}
 
 	@ObfuscatedName("dy.jg(Lhq;Lhf;B)V")
@@ -12916,13 +12913,13 @@ public class Client extends GameShell {
 	public static void method16452(Component[] arg0, Component arg1, boolean arg2) {
 		int var3 = arg1.scrollwidth == 0 ? arg1.width : arg1.scrollwidth;
 		int var4 = arg1.scrollheight == 0 ? arg1.height : arg1.scrollheight;
-		method1597(arg0, arg1.parentlayer, var3, var4, arg2);
+		drawLayer(arg0, arg1.parentlayer, var3, var4, arg2);
 		if (arg1.sortedsubcomponents != null) {
-			method1597(arg1.sortedsubcomponents, arg1.parentlayer, var3, var4, arg2);
+			drawLayer(arg1.sortedsubcomponents, arg1.parentlayer, var3, var4, arg2);
 		}
 		SubInterface var5 = (SubInterface) openedSubInterfaces.get((long) arg1.parentlayer);
 		if (var5 != null) {
-			method8493(var5.field11571, var3, var4, arg2);
+			drawInterface(var5.field11571, var3, var4, arg2);
 		}
 		if (field10986 != arg1) {
 			return;
@@ -12945,14 +12942,14 @@ public class Client extends GameShell {
 	}
 
 	@ObfuscatedName("tb.jp(IIIZB)V")
-	public static final void method8493(int arg0, int arg1, int arg2, boolean arg3) {
+	public static final void drawInterface(int arg0, int arg1, int arg2, boolean arg3) {
 		if (Component.openInterface(arg0, null)) {
-			method1597(Component.interfaces[arg0].components, -1, arg1, arg2, arg3);
+			drawLayer(Component.interfaces[arg0].components, -1, arg1, arg2, arg3);
 		}
 	}
 
 	@ObfuscatedName("ck.jk([Lhf;IIIZI)V")
-	public static void method1597(Component[] arg0, int arg1, int arg2, int arg3, boolean arg4) {
+	public static void drawLayer(Component[] arg0, int arg1, int arg2, int arg3, boolean arg4) {
 		for (int var5 = 0; var5 < arg0.length; var5++) {
 			Component var6 = arg0[var5];
 			if (var6 != null && var6.layer == arg1) {
@@ -13001,7 +12998,7 @@ public class Client extends GameShell {
 		if (arg0.field2174 == 4) {
 			arg0.height = arg0.aspectheight * arg0.width / arg0.aspectwidth;
 		}
-		if (field10881 && (method17197(arg0).field11385 != 0 || arg0.type == 0)) {
+		if (field10881 && (getActive(arg0).field11385 != 0 || arg0.type == 0)) {
 			if (arg0.height < 5 && arg0.width < 5) {
 				arg0.height = 5;
 				arg0.width = 5;
@@ -13053,7 +13050,7 @@ public class Client extends GameShell {
 		} else {
 			arg0.y = arg2 - arg0.height - (arg0.ypos * arg2 >> 14);
 		}
-		if (!field10881 || method17197(arg0).field11385 == 0 && arg0.type != 0) {
+		if (!field10881 || getActive(arg0).field11385 == 0 && arg0.type != 0) {
 			return;
 		}
 		if (arg0.x < 0) {
@@ -13087,27 +13084,27 @@ public class Client extends GameShell {
 			field10799 = GameShell.canvasWid;
 			field10998 = GameShell.canvasHei;
 		}
-		method8198(null, openedTopInterface, 0, 0, GameShell.canvasWid, GameShell.canvasHei, 0, 0, var0, var1);
+		loopInterface(null, openedTopInterface, 0, 0, GameShell.canvasWid, GameShell.canvasHei, 0, 0, var0, var1);
 		if (ClientWorldMap.component != null) {
 			ClientWorldMap.method929(var0, var1);
 		}
 	}
 
 	@ObfuscatedName("sh.kq(Lalu;IIIIIIIIII)V")
-	public static final void method8198(SubInterface arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9) {
+	public static final void loopInterface(SubInterface arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9) {
 		if (!Component.openInterface(arg1, null)) {
 			return;
 		}
 		if (arg0 == null || arg0.method18183()) {
 			Interface var10 = Component.interfaces[arg1];
-			updateInterfaceAnimation(var10, var10.method3923(), -1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+			loopLayer(var10, var10.method3923(), -1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
 		} else {
-			ifCloseSub(arg0, true, false);
+			closeSubInterface(arg0, true, false);
 		}
 	}
 
 	@ObfuscatedName("client.kg(Lhq;[Lhf;IIIIIIIII)V")
-	public static final void updateInterfaceAnimation(Interface arg0, Component[] arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10) {
+	public static final void loopLayer(Interface arg0, Component[] arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10) {
 		for (int var11 = 0; var11 < arg1.length; var11++) {
 			Component var12 = arg1[var11];
 			if (var12 != null && var12.layer == arg2) {
@@ -13134,8 +13131,8 @@ public class Client extends GameShell {
 					var17 = var19 < arg5 ? var19 : arg5;
 					var18 = var20 < arg6 ? var20 : arg6;
 				}
-				if (var12.type == 0 || var12.hashook || method17197(var12).field11385 != 0 || field10828 == var12 || Component.field2171 == var12.clientcode || Component.field2167 == var12.clientcode || Component.field2341 == var12.clientcode || Component.field2161 == var12.clientcode) {
-					if (!ifIsVisible(var12)) {
+				if (var12.type == 0 || var12.hashook || getActive(var12).field11385 != 0 || field10828 == var12 || Component.field2171 == var12.clientcode || Component.field2167 == var12.clientcode || Component.field2341 == var12.clientcode || Component.field2161 == var12.clientcode) {
+					if (!hide(var12)) {
 						if (field10989 == var12 && method4411(field10989)) {
 							field10999 = true;
 							field11000 = var13;
@@ -13251,9 +13248,9 @@ public class Client extends GameShell {
 											method4527(var35 + 1, var12.parentlayer, var12.id, "");
 										} else if (var35 == 10) {
 											method9403();
-											ServerKeyProperties var41 = method17197(var12);
+											ServerKeyProperties var41 = getActive(var12);
 											setTargetActiveComponent(var12, var41.method17691(), var41.field11381);
-											field11039 = method9557(var12);
+											field11039 = targetVerb(var12);
 											if (field11039 == null) {
 												field11039 = "Null";
 											}
@@ -13280,13 +13277,13 @@ public class Client extends GameShell {
 								}
 							}
 							if (var29) {
-								ifDragPickup(var12, var30.getMouseClickX() - var13, var30.getMouseClickY() - var14);
+								dragTryPickup(var12, var30.getMouseClickX() - var13, var30.getMouseClickY() - var14);
 							}
 							if (field10989 != null && field10989 != var12 && var23) {
 								if (var12.noclickthrough) {
 									field10993 = null;
 								}
-								if (method17197(var12).method17693()) {
+								if (getActive(var12).method17693()) {
 									field10993 = var12;
 								}
 							}
@@ -13777,13 +13774,13 @@ public class Client extends GameShell {
 							}
 							method7332(var12);
 							if (var12.type == 0) {
-								updateInterfaceAnimation(arg0, arg1, var12.parentlayer, var15, var16, var17, var18, var13 - var12.scrollx, var14 - var12.scrolly, arg9, arg10);
+								loopLayer(arg0, arg1, var12.parentlayer, var15, var16, var17, var18, var13 - var12.scrollx, var14 - var12.scrolly, arg9, arg10);
 								if (var12.sortedsubcomponents != null) {
-									updateInterfaceAnimation(arg0, var12.sortedsubcomponents, var12.parentlayer, var15, var16, var17, var18, var13 - var12.scrollx, var14 - var12.scrolly, arg9, arg10);
+									loopLayer(arg0, var12.sortedsubcomponents, var12.parentlayer, var15, var16, var17, var18, var13 - var12.scrollx, var14 - var12.scrolly, arg9, arg10);
 								}
 								SubInterface var127 = (SubInterface) openedSubInterfaces.get((long) var12.parentlayer);
 								if (var127 != null) {
-									method8198(var127, var127.field11571, var15, var16, var17, var18, var13 - var12.scrollx, var14 - var12.scrolly, arg9, arg10);
+									loopInterface(var127, var127.field11571, var15, var16, var17, var18, var13 - var12.scrollx, var14 - var12.scrolly, arg9, arg10);
 								}
 							}
 						}
@@ -13803,24 +13800,24 @@ public class Client extends GameShell {
 	}
 
 	@ObfuscatedName("bl.ko(III)V")
-	public static final void method1023(int arg0, int arg1) {
+	public static final void runHookImmediate(int arg0, int arg1) {
 		if (Component.openInterface(arg0, null)) {
-			method8199(Component.interfaces[arg0].components, arg1);
+			runHookLayer(Component.interfaces[arg0].components, arg1);
 		}
 	}
 
 	@ObfuscatedName("sh.kf([Lhf;IB)V")
-	public static final void method8199(Component[] arg0, int arg1) {
+	public static final void runHookLayer(Component[] arg0, int arg1) {
 		for (int var2 = 0; var2 < arg0.length; var2++) {
 			Component var3 = arg0[var2];
 			if (var3 != null) {
 				if (var3.type == 0) {
 					if (var3.sortedsubcomponents != null) {
-						method8199(var3.sortedsubcomponents, arg1);
+						runHookLayer(var3.sortedsubcomponents, arg1);
 					}
 					SubInterface var4 = (SubInterface) openedSubInterfaces.get((long) var3.parentlayer);
 					if (var4 != null) {
-						method1023(var4.field11571, arg1);
+						runHookImmediate(var4.field11571, arg1);
 					}
 				}
 				if (arg1 == 0 && var3.ondialogabort != null) {
@@ -13846,12 +13843,12 @@ public class Client extends GameShell {
 	}
 
 	@ObfuscatedName("ahe.kx(Lhf;III)V")
-	public static final void ifDragPickup(Component arg0, int arg1, int arg2) {
+	public static final void dragTryPickup(Component arg0, int arg1, int arg2) {
 		if (field10989 != null || MiniMenu.open || (arg0 == null || !method4411(arg0))) {
 			return;
 		}
 		field10989 = arg0;
-		field10828 = method14755(arg0);
+		field10828 = getDragLayer(arg0);
 		field10991 = arg1;
 		field10992 = arg2;
 		field6656 = 0;
@@ -13864,8 +13861,8 @@ public class Client extends GameShell {
 	}
 
 	@ObfuscatedName("ps.ks(I)V")
-	public static final void method6847() {
-		requestRedrawComponent(field10989);
+	public static final void loopIf3Drag() {
+		componentUpdated(field10989);
 		field6656++;
 		if (field10999 && field10878) {
 			int var0 = mouse.getX();
@@ -13953,7 +13950,7 @@ public class Client extends GameShell {
 	}
 
 	@ObfuscatedName("iz.kh(Lhf;I)V")
-	public static void requestRedrawComponent(Component arg0) {
+	public static void componentUpdated(Component arg0) {
 		if (field11037 == arg0.field2237) {
 			topLevelComponentRedrawRequestedTemp[arg0.field2182] = true;
 		}
@@ -13967,7 +13964,7 @@ public class Client extends GameShell {
 	}
 
 	@ObfuscatedName("abn.kl(Lhf;I)Lhf;")
-	public static Component method14755(Component arg0) {
+	public static Component getDragLayer(Component arg0) {
 		Component var1 = method17238(arg0);
 		if (var1 == null) {
 			var1 = arg0.draggable;
@@ -13977,7 +13974,7 @@ public class Client extends GameShell {
 
 	@ObfuscatedName("iu.kb(Lhf;I)Z")
 	public static boolean method4411(Component arg0) {
-		ServerKeyProperties var1 = method17197(arg0);
+		ServerKeyProperties var1 = getActive(arg0);
 		if (var1.method17710() > 0) {
 			return true;
 		} else if (var1.method17701()) {
@@ -13988,7 +13985,7 @@ public class Client extends GameShell {
 	}
 
 	@ObfuscatedName("anr.kr([Ljava/lang/String;I)[Ljava/lang/String;")
-	public static final String[] method18725(String[] arg0) {
+	public static final String[] prependOpIndex(String[] arg0) {
 		String[] var1 = new String[5];
 		for (int var2 = 0; var2 < 5; var2++) {
 			var1[var2] = var2 + " ";
@@ -14000,7 +13997,7 @@ public class Client extends GameShell {
 	}
 
 	@ObfuscatedName("aku.kd(I[IB)V")
-	public static final void method17758(int arg0, int[] arg1) {
+	public static final void ifAnimReset(int arg0, int[] arg1) {
 		if (!Component.openInterface(arg0, arg1)) {
 			return;
 		}
@@ -14014,25 +14011,25 @@ public class Client extends GameShell {
 	}
 
 	@ObfuscatedName("aaq.kc(II)V")
-	public static final void method14428(int arg0) {
+	public static final void animateInterface(int arg0) {
 		if (Component.openInterface(arg0, null)) {
-			method6107(Component.interfaces[arg0].components, -1);
+			animateLayer(Component.interfaces[arg0].components, -1);
 		}
 	}
 
 	@ObfuscatedName("nc.kj([Lhf;II)V")
-	public static final void method6107(Component[] arg0, int arg1) {
+	public static final void animateLayer(Component[] arg0, int arg1) {
 		for (int var2 = 0; var2 < arg0.length; var2++) {
 			Component var3 = arg0[var2];
-			if (var3 != null && var3.layer == arg1 && !ifIsVisible(var3)) {
+			if (var3 != null && var3.layer == arg1 && !hide(var3)) {
 				if (var3.type == 0) {
-					method6107(arg0, var3.parentlayer);
+					animateLayer(arg0, var3.parentlayer);
 					if (var3.sortedsubcomponents != null) {
-						method6107(var3.sortedsubcomponents, var3.parentlayer);
+						animateLayer(var3.sortedsubcomponents, var3.parentlayer);
 					}
 					SubInterface var4 = (SubInterface) openedSubInterfaces.get((long) var3.parentlayer);
 					if (var4 != null) {
-						method14428(var4.field11571);
+						animateInterface(var4.field11571);
 					}
 				}
 				if (var3.type == 6 && var3.modelanim != -1) {
@@ -14049,7 +14046,7 @@ public class Client extends GameShell {
 	}
 
 	@ObfuscatedName("ank.kn(II)V")
-	public static final void onVarPlayerChanged(int arg0) {
+	public static final void clientVar(int arg0) {
 		PositionedSound.method15185();
 		int var1 = ((VarPlayerType) varPlayerTypeList.list(arg0)).clientCode;
 		if (var1 == 0) {
@@ -14065,34 +14062,33 @@ public class Client extends GameShell {
 	}
 
 	@ObfuscatedName("ve.kp(Lhf;I)V")
-	public static final void method9454(Component arg0) {
-		if (Component.field2159 != arg0.clientcode) {
-			return;
-		}
-		if (localPlayerEntity.nameUnfiltered == null) {
-			arg0.model = 0;
-			arg0.field2298 = 0;
-			return;
-		}
-		arg0.modelangle_x = 150;
-		arg0.modelangle_y = (int) (Math.sin((double) loopCycle / 40.0D) * 256.0D) & 0x7FF;
-		arg0.modelkind = 5;
-		arg0.model = currentPlayerUid;
-		arg0.field2298 = StringTools.method14059(localPlayerEntity.nameUnfiltered);
-		EntityWalkAnimationNode var1 = localPlayerEntity.field10432;
-		if (var1 == null) {
-			arg0.modelAnimator = null;
-			return;
-		}
-		if (arg0.modelAnimator == null) {
-			arg0.modelAnimator = new InterfaceAnimationNode();
-		}
-		arg0.modelanim = var1.getSeqTypeId();
-		arg0.modelAnimator.method14370(var1);
-	}
+	public static final void clientComponent(Component arg0) {
+        if (Component.field2159 == arg0.clientcode) {
+            if (localPlayerEntity.nameUnfiltered == null) {
+                arg0.model = 0;
+                arg0.field2298 = 0;
+                return;
+            }
+            arg0.modelangle_x = 150;
+            arg0.modelangle_y = (int) (Math.sin((double) loopCycle / 40.0D) * 256.0D) & 0x7FF;
+            arg0.modelkind = 5;
+            arg0.model = currentPlayerUid;
+            arg0.field2298 = StringTools.method14059(localPlayerEntity.nameUnfiltered);
+            EntityWalkAnimationNode var1 = localPlayerEntity.field10432;
+            if (var1 == null) {
+                arg0.modelAnimator = null;
+                return;
+            }
+            if (arg0.modelAnimator == null) {
+                arg0.modelAnimator = new InterfaceAnimationNode();
+            }
+            arg0.modelanim = var1.getSeqTypeId();
+            arg0.modelAnimator.method14370(var1);
+        }
+    }
 
 	@ObfuscatedName("sp.km(ZI)V")
-	public static final void ifClose(boolean arg0) {
+	public static final void closeModal(boolean arg0) {
 		ClientMessage var1 = ClientMessage.createMessage(ClientProt.CLOSE_MODAL, gameConnection.randomOut);
 		gameConnection.queue(var1);
 		for (SubInterface var2 = (SubInterface) openedSubInterfaces.head(); var2 != null; var2 = (SubInterface) openedSubInterfaces.next()) {
@@ -14103,29 +14099,29 @@ public class Client extends GameShell {
 				}
 			}
 			if (var2.field11570 == 0) {
-				ifCloseSub(var2, true, arg0);
+				closeSubInterface(var2, true, arg0);
 			}
 		}
 		if (pressedContinueOption != null) {
-			requestRedrawComponent(pressedContinueOption);
+			componentUpdated(pressedContinueOption);
 			pressedContinueOption = null;
 		}
 	}
 
 	@ObfuscatedName("is.ky(ILalu;[IZB)Lalu;")
-	public static final SubInterface ifOpenSub(int arg0, SubInterface arg1, int[] arg2, boolean arg3) {
+	public static final SubInterface openSubInterface(int arg0, SubInterface arg1, int[] arg2, boolean arg3) {
 		SubInterface var4 = (SubInterface) openedSubInterfaces.get((long) arg0);
 		if (var4 != null) {
-			ifCloseSub(var4, arg1.field11571 != var4.field11571, arg3);
+			closeSubInterface(var4, arg1.field11571 != var4.field11571, arg3);
 		}
 		openedSubInterfaces.put(arg1, (long) arg0);
-		method17758(arg1.field11571, arg2);
+		ifAnimReset(arg1.field11571, arg2);
 		Component var5 = Component.get(arg0);
 		if (var5 != null) {
-			requestRedrawComponent(var5);
+			componentUpdated(var5);
 		}
 		if (pressedContinueOption != null) {
-			requestRedrawComponent(pressedContinueOption);
+			componentUpdated(pressedContinueOption);
 			pressedContinueOption = null;
 		}
 		if (var5 != null) {
@@ -14135,27 +14131,27 @@ public class Client extends GameShell {
 			ScriptRunner.executeOnLoad(arg1.field11571, arg2);
 		}
 		if (!arg3 && openedTopInterface != -1) {
-			method1023(openedTopInterface, 1);
+			runHookImmediate(openedTopInterface, 1);
 		}
 		return arg1;
 	}
 
 	@ObfuscatedName("k.kk(Lalu;ZZI)V")
-	public static final void ifCloseSub(SubInterface arg0, boolean arg1, boolean arg2) {
+	public static final void closeSubInterface(SubInterface arg0, boolean arg1, boolean arg2) {
 		int var3 = arg0.field11571;
 		int var4 = (int) arg0.nodeId;
 		arg0.unlink();
 		if (arg1) {
 			Component.method7602(var3);
 		}
-		method5080(var3);
+		purgeServerActive(var3);
 		Component var5 = Component.get(var4);
 		if (var5 != null) {
-			requestRedrawComponent(var5);
+			componentUpdated(var5);
 		}
 		MiniMenu.method15023(var3);
 		if (!arg2 && openedTopInterface != -1) {
-			method1023(openedTopInterface, 1);
+			runHookImmediate(openedTopInterface, 1);
 		}
 		HashTableIterator var6 = new HashTableIterator(openedSubInterfaces);
 		for (SubInterface var7 = (SubInterface) var6.nextNode(); var7 != null; var7 = (SubInterface) var6.next()) {
@@ -14168,7 +14164,7 @@ public class Client extends GameShell {
 			if (var7.field11570 == 3) {
 				int var8 = (int) var7.nodeId;
 				if (var8 >>> 16 == var3) {
-					ifCloseSub(var7, true, arg2);
+					closeSubInterface(var7, true, arg2);
 				}
 			}
 		}
@@ -14377,7 +14373,7 @@ public class Client extends GameShell {
 	}
 
 	@ObfuscatedName("pn.lo(Ljava/lang/String;I)V")
-	public static final void friendAdd(String arg0) {
+	public static final void addFriend(String arg0) {
 		int var1 = playerIsMembers ? 400 : 200;
 		if (arg0 == null) {
 			return;
@@ -14432,7 +14428,7 @@ public class Client extends GameShell {
 	}
 
 	@ObfuscatedName("az.lh(Ljava/lang/String;ZB)V")
-	public static final void ignoreAdd(String arg0, boolean arg1) {
+	public static final void addIgnore(String arg0, boolean arg1) {
 		int var2 = playerIsMembers ? 400 : 100;
 		if (arg0 == null) {
 			return;
@@ -14488,7 +14484,7 @@ public class Client extends GameShell {
 	}
 
 	@ObfuscatedName("vv.ls(Ljava/lang/String;B)V")
-	public static final void friendDelete(String arg0) {
+	public static final void delFriend(String arg0) {
 		if (arg0 == null) {
 			return;
 		}
@@ -14517,7 +14513,7 @@ public class Client extends GameShell {
 	}
 
 	@ObfuscatedName("cs.lu(Ljava/lang/String;B)V")
-	public static final void ignoreDelete(String arg0) {
+	public static final void delIgnore(String arg0) {
 		if (arg0 == null) {
 			return;
 		}
@@ -14546,7 +14542,7 @@ public class Client extends GameShell {
 	}
 
 	@ObfuscatedName("jh.ly(II)V")
-	public static void method5080(int arg0) {
+	public static void purgeServerActive(int arg0) {
 		for (Node var1 = field10873.head(); var1 != null; var1 = field10873.next()) {
 			if ((var1.nodeId >> 48 & 0xFFFFL) == (long) arg0) {
 				var1.unlink();
@@ -14555,14 +14551,14 @@ public class Client extends GameShell {
 	}
 
 	@ObfuscatedName("client.lg(Lhf;)Laki;")
-	public static ServerKeyProperties method17197(Component arg0) {
+	public static ServerKeyProperties getActive(Component arg0) {
 		ServerKeyProperties var1 = (ServerKeyProperties) field10873.get(((long) arg0.parentlayer << 32) + (long) arg0.id);
 		return var1 == null ? arg0.field2268 : var1;
 	}
 
 	@ObfuscatedName("client.lx(Lhf;)Lhf;")
 	public static Component method17238(Component arg0) {
-		ServerKeyProperties var1 = method17197(arg0);
+		ServerKeyProperties var1 = getActive(arg0);
 		if (var1.method17701()) {
 			return field1734;
 		}
@@ -14580,9 +14576,9 @@ public class Client extends GameShell {
 	}
 
 	@ObfuscatedName("client.lj(Lhf;)Z")
-	public static boolean ifIsVisible(Component arg0) {
+	public static boolean hide(Component arg0) {
 		if (field10881) {
-			if (method17197(arg0).field11385 != 0) {
+			if (getActive(arg0).field11385 != 0) {
 				return false;
 			}
 			if (arg0.type == 0) {
@@ -14597,19 +14593,19 @@ public class Client extends GameShell {
 	}
 
 	@ObfuscatedName("akv.lw(Lhf;IS)I")
-	public static int method17826(Component arg0, int arg1) {
-		if (!method17197(arg0).method17690(arg1) && arg0.onop == null) {
+	public static int getIfTypeOpName(Component arg0, int arg1) {
+		if (!getActive(arg0).method17690(arg1) && arg0.onop == null) {
 			return -1;
-		} else if (arg0.opcursor == null || arg0.opcursor.length <= arg1) {
+		} else if (arg0.opname == null || arg0.opname.length <= arg1) {
 			return -1;
 		} else {
-			return arg0.opcursor[arg1];
+			return arg0.opname[arg1];
 		}
 	}
 
 	@ObfuscatedName("vz.lz(Lhf;I)Ljava/lang/String;")
-	public static String method9557(Component arg0) {
-		if (method17197(arg0).method17691() == 0) {
+	public static String targetVerb(Component arg0) {
+		if (getActive(arg0).method17691() == 0) {
 			return null;
 		} else if (arg0.targetverb == null || arg0.targetverb.trim().length() == 0) {
 			return field10881 ? "Hidden-use" : null;

@@ -32,7 +32,7 @@ public class ObjIconFactory {
 		boolean var2 = Client.objTypeList.method18900(arg0, arg1.invobject, arg1.invcount, arg1.outline, arg1.graphicshadow | 0xFF000000, arg1.field2241, arg1.field2246 ? Client.localPlayerEntity.model : null) == null;
 		if (var2) {
 			icons.addTail(new ObjIconRequest(arg1.invobject, arg1.invcount, arg1.outline, arg1.graphicshadow | 0xFF000000, arg1.field2241, arg1.field2246));
-			Client.requestRedrawComponent(arg1);
+			Client.componentUpdated(arg1);
 		}
 	}
 

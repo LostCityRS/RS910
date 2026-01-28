@@ -1240,7 +1240,7 @@ public class LoginManager {
 					break;
 				}
 			}
-			Client.ifCloseSub(var2, true, false);
+			Client.closeSubInterface(var2, true, false);
 		}
 		Client.openedTopInterface = -1;
 		Client.openedSubInterfaces = new HashTable(8);

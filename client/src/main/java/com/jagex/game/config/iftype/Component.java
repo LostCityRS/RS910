@@ -428,7 +428,7 @@ public class Component {
 	public String pausetext;
 
 	@ObfuscatedName("hf.ed")
-	public int[] opcursor;
+	public int[] opname;
 
 	@ObfuscatedName("hf.ee")
 	public int targetopcursor = -1;
@@ -925,15 +925,15 @@ public class Component {
 		}
 		if (var16 > 0) {
 			int var18 = arg0.g1();
-			this.opcursor = new int[var18 + 1];
-			for (int var19 = 0; var19 < this.opcursor.length; var19++) {
-				this.opcursor[var19] = -1;
+			this.opname = new int[var18 + 1];
+			for (int var19 = 0; var19 < this.opname.length; var19++) {
+				this.opname[var19] = -1;
 			}
-			this.opcursor[var18] = arg0.g2();
+			this.opname[var18] = arg0.g2();
 		}
 		if (var16 > 1) {
 			int var20 = arg0.g1();
-			this.opcursor[var20] = arg0.g2();
+			this.opname[var20] = arg0.g2();
 		}
 		this.pausetext = arg0.gjstr();
 		if (this.pausetext.equals("")) {
@@ -1345,19 +1345,19 @@ public class Component {
 
 	@ObfuscatedName("hf.j(III)V")
 	public void setopcursor(int arg0, int arg1) {
-		if (this.opcursor == null || this.opcursor.length <= arg0) {
+		if (this.opname == null || this.opname.length <= arg0) {
 			int[] var3 = new int[arg0 + 1];
-			if (this.opcursor != null) {
-				for (int var4 = 0; var4 < this.opcursor.length; var4++) {
-					var3[var4] = this.opcursor[var4];
+			if (this.opname != null) {
+				for (int var4 = 0; var4 < this.opname.length; var4++) {
+					var3[var4] = this.opname[var4];
 				}
-				for (int var5 = this.opcursor.length; var5 < arg0; var5++) {
+				for (int var5 = this.opname.length; var5 < arg0; var5++) {
 					var3[var5] = -1;
 				}
 			}
-			this.opcursor = var3;
+			this.opname = var3;
 		}
-		this.opcursor[arg0] = arg1;
+		this.opname[arg0] = arg1;
 	}
 
 	@ObfuscatedName("hf.t(Ldh;B)Lhx;")
